@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -64,6 +66,16 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $hiredate;
+
+    /**
+     * @ORM\OneToMany(targetEntity=PackagesFees::class, mappedBy="userfk", orphanRemoval=true)
+     */
+    private $packagesFees;
+
+    public function __construct()
+    {
+        $this->packagesFees = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -211,6 +223,36 @@ class User implements UserInterface
     public function setHiredate(?string $hiredate): self
     {
         $this->hiredate = $hiredate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PackagesFees[]
+     */
+    public function getPackagesFees(): Collection
+    {
+        return $this->packagesFees;
+    }
+
+    public function addPackagesFee(PackagesFees $packagesFee): self
+    {
+        if (!$this->packagesFees->contains($packagesFee)) {
+            $this->packagesFees[] = $packagesFee;
+            $packagesFee->setUserfk($this);
+        }
+
+        return $this;
+    }
+
+    public function removePackagesFee(PackagesFees $packagesFee): self
+    {
+        if ($this->packagesFees->removeElement($packagesFee)) {
+            // set the owning side to null (unless already changed)
+            if ($packagesFee->getUserfk() === $this) {
+                $packagesFee->setUserfk(null);
+            }
+        }
 
         return $this;
     }

@@ -67,6 +67,28 @@ class User implements UserInterface
      */
     private $hireDate;
 
+    /**
+     * @ORM\OneToMany(targetEntity=LineFeesPackage::class, mappedBy="userFk", orphanRemoval=true)
+     */
+    private $lineFeesPackages;
+
+    /**
+     * @ORM\OneToMany(targetEntity=LineChargesOutsideTheBundle::class, mappedBy="userFk", orphanRemoval=true)
+     */
+    private $lineChargesOutsideTheBundles;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ExpenseSheet::class, mappedBy="userFk", orphanRemoval=true)
+     */
+    private $expenseSheets;
+
+    public function __construct()
+    {
+        $this->lineFeesPackages = new ArrayCollection();
+        $this->lineChargesOutsideTheBundles = new ArrayCollection();
+        $this->expenseSheets = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -213,6 +235,96 @@ class User implements UserInterface
     public function setHireDate(?string $hireDate): self
     {
         $this->hireDate = $hireDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|LineFeesPackage[]
+     */
+    public function getLineFeesPackages(): Collection
+    {
+        return $this->lineFeesPackages;
+    }
+
+    public function addLineFeesPackage(LineFeesPackage $lineFeesPackage): self
+    {
+        if (!$this->lineFeesPackages->contains($lineFeesPackage)) {
+            $this->lineFeesPackages[] = $lineFeesPackage;
+            $lineFeesPackage->setUserFk($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLineFeesPackage(LineFeesPackage $lineFeesPackage): self
+    {
+        if ($this->lineFeesPackages->removeElement($lineFeesPackage)) {
+            // set the owning side to null (unless already changed)
+            if ($lineFeesPackage->getUserFk() === $this) {
+                $lineFeesPackage->setUserFk(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|LineChargesOutsideTheBundle[]
+     */
+    public function getLineChargesOutsideTheBundles(): Collection
+    {
+        return $this->lineChargesOutsideTheBundles;
+    }
+
+    public function addLineChargesOutsideTheBundle(LineChargesOutsideTheBundle $lineChargesOutsideTheBundle): self
+    {
+        if (!$this->lineChargesOutsideTheBundles->contains($lineChargesOutsideTheBundle)) {
+            $this->lineChargesOutsideTheBundles[] = $lineChargesOutsideTheBundle;
+            $lineChargesOutsideTheBundle->setUserFk($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLineChargesOutsideTheBundle(LineChargesOutsideTheBundle $lineChargesOutsideTheBundle): self
+    {
+        if ($this->lineChargesOutsideTheBundles->removeElement($lineChargesOutsideTheBundle)) {
+            // set the owning side to null (unless already changed)
+            if ($lineChargesOutsideTheBundle->getUserFk() === $this) {
+                $lineChargesOutsideTheBundle->setUserFk(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ExpenseSheet[]
+     */
+    public function getExpenseSheets(): Collection
+    {
+        return $this->expenseSheets;
+    }
+
+    public function addExpenseSheet(ExpenseSheet $expenseSheet): self
+    {
+        if (!$this->expenseSheets->contains($expenseSheet)) {
+            $this->expenseSheets[] = $expenseSheet;
+            $expenseSheet->setUserFk($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExpenseSheet(ExpenseSheet $expenseSheet): self
+    {
+        if ($this->expenseSheets->removeElement($expenseSheet)) {
+            // set the owning side to null (unless already changed)
+            if ($expenseSheet->getUserFk() === $this) {
+                $expenseSheet->setUserFk(null);
+            }
+        }
 
         return $this;
     }

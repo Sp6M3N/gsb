@@ -40,12 +40,12 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $name;
+    private $lastName;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $firstname;
+    private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -60,22 +60,12 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $postalcode;
+    private $postalCode;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $hiredate;
-
-    /**
-     * @ORM\OneToMany(targetEntity=PackagesFees::class, mappedBy="userfk", orphanRemoval=true)
-     */
-    private $packagesFees;
-
-    public function __construct()
-    {
-        $this->packagesFees = new ArrayCollection();
-    }
+    private $hireDate;
 
     public function getId(): ?int
     {
@@ -99,7 +89,7 @@ class User implements UserInterface
      *
      * @see UserInterface
      */
-    public function getUsername(): string
+    public function getUserName(): string
     {
         return (string) $this->email;
     }
@@ -155,26 +145,26 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function getName(): ?string
+    public function getLastName(): ?string
     {
-        return $this->name;
+        return $this->lastName;
     }
 
-    public function setName(?string $name): self
+    public function setLastName(?string $lastName): self
     {
-        $this->name = $name;
+        $this->lastName = $lastName;
 
         return $this;
     }
 
-    public function getFirstname(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->firstname;
+        return $this->firstName;
     }
 
-    public function setFirstname(string $firstname): self
+    public function setFirstName(string $firstName): self
     {
-        $this->firstname = $firstname;
+        $this->firstName = $firstName;
 
         return $this;
     }
@@ -203,57 +193,28 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getPostalcode(): ?string
+    public function getPostalCode(): ?string
     {
-        return $this->postalcode;
+        return $this->postalCode;
     }
 
-    public function setPostalcode(string $postalcode): self
+    public function setPostalCode(string $postalCode): self
     {
-        $this->postalcode = $postalcode;
+        $this->postalCode = $postalCode;
 
         return $this;
     }
 
-    public function getHiredate(): ?string
+    public function getHireDate(): ?string
     {
-        return $this->hiredate;
+        return $this->hireDate;
     }
 
-    public function setHiredate(?string $hiredate): self
+    public function setHireDate(?string $hireDate): self
     {
-        $this->hiredate = $hiredate;
+        $this->hireDate = $hireDate;
 
         return $this;
     }
 
-    /**
-     * @return Collection|PackagesFees[]
-     */
-    public function getPackagesFees(): Collection
-    {
-        return $this->packagesFees;
-    }
-
-    public function addPackagesFee(PackagesFees $packagesFee): self
-    {
-        if (!$this->packagesFees->contains($packagesFee)) {
-            $this->packagesFees[] = $packagesFee;
-            $packagesFee->setUserfk($this);
-        }
-
-        return $this;
-    }
-
-    public function removePackagesFee(PackagesFees $packagesFee): self
-    {
-        if ($this->packagesFees->removeElement($packagesFee)) {
-            // set the owning side to null (unless already changed)
-            if ($packagesFee->getUserfk() === $this) {
-                $packagesFee->setUserfk(null);
-            }
-        }
-
-        return $this;
-    }
 }
